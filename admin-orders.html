@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - Rosemilk Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff0f3',
+                            100: '#ffe3e8',
+                            200: '#ffc9d6',
+                            300: '#ff9fb6',
+                            400: '#ff6b8e',
+                            500: '#f73b68',
+                            600: '#e31b4b',
+                            700: '#bf0e36',
+                            800: '#9e0d2d',
+                            900: '#850f29',
+                        },
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-sans antialiased text-gray-800 bg-gray-50 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
+        <div class="h-20 flex items-center justify-center border-b border-gray-100">
+            <a href="index.html" class="flex items-center gap-2">
+                <i class="fa-solid fa-rose text-brand-500 text-2xl"></i>
+                <span class="font-serif text-2xl font-bold text-gray-900">Rosemilk</span>
+            </a>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            <a href="admin-dashboard.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+            </a>
+            <a href="admin-products.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-box w-5"></i> Products
+            </a>
+            <a href="admin-orders.html"
+                class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-600 rounded-lg font-medium">
+                <i class="fa-solid fa-shopping-bag w-5"></i> Orders
+                <span class="ml-auto bg-brand-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">23</span>
+            </a>
+            <a href="admin-customers.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-users w-5"></i> Customers
+            </a>
+            <a href="admin-settings.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-gear w-5"></i> Settings
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="#" onclick="logout()"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 transition">
+                <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Header -->
+        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <h2 class="text-xl font-bold text-gray-800">Orders Management</h2>
+
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=f73b68&color=fff" alt="Admin"
+                        class="w-10 h-10 rounded-full border-2 border-brand-100">
+                    <div class="hidden sm:block">
+                        <p class="text-sm font-bold text-gray-900" id="user-name">Admin User</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Orders Table Content -->
+        <div class="flex-1 overflow-auto p-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-900">All Orders</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200">Export</button>
+                        <button
+                            class="px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-medium hover:bg-brand-600">+
+                            New Order</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-gray-600">
+                        <thead class="bg-gray-50 text-xs uppercase font-medium text-gray-500">
+                            <tr>
+                                <th class="px-6 py-4">Order ID</th>
+                                <th class="px-6 py-4">Customer</th>
+                                <th class="px-6 py-4">Product</th>
+                                <th class="px-6 py-4">Date</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-right">Amount</th>
+                                <th class="px-6 py-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm" id="orders-table-body">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                    <span class="text-xs text-gray-500">Showing 20 of 1254 orders</span>
+                    <div class="flex gap-1">
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                            disabled>Prev</button>
+                        <button class="px-3 py-1 rounded border border-gray-300 bg-brand-500 text-white">1</button>
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">2</button>
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">3</button>
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const SUPABASE_URL = 'https://dyptudqbdygqkjnqizxt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_1ybwmjWUlErvgvRAuNVVNw_duKOSDtl';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const tableBody = document.getElementById('orders-table-body');
+
+        async function loadOrders() {
+            tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading real-time orders...</td></tr>';
+
+            try {
+                const { data: orders, error } = await _supabase
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!orders || orders.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-400">No orders found in the database.</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = orders.map(order => {
+                    const statusColors = {
+                        'Pending Payment': 'bg-yellow-100 text-yellow-700',
+                        'Paid / Ready': 'bg-blue-100 text-blue-700',
+                        'Shipped': 'bg-purple-100 text-purple-700',
+                        'Delivered': 'bg-green-100 text-green-700',
+                        'Cancelled': 'bg-red-100 text-red-700'
+                    };
+
+                    const date = new Date(order.created_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    return `
+                    <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                        <td class="px-6 py-4 font-bold text-gray-900 border-l-4 ${order.status === 'Delivered' ? 'border-green-500' : 'border-brand-300'}">#ORD-${order.id}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <span class="font-bold text-gray-900">${order.customer_name}</span>
+                                <span class="text-[10px] text-gray-400 font-medium">${order.customer_phone}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 max-w-[200px] truncate" title="${order.items}">${order.items}</td>
+                        <td class="px-6 py-4 text-xs font-medium text-gray-400">${date}</td>
+                        <td class="px-6 py-4">
+                            <select onchange="updateStatus(${order.id}, this.value)" 
+                                class="px-3 py-1.5 rounded-full text-xs font-bold outline-none cursor-pointer transition-all ${statusColors[order.status] || 'bg-gray-100 text-gray-700'}">
+                                <option value="Pending Payment" ${order.status === 'Pending Payment' ? 'selected' : ''}>Pending Payment</option>
+                                <option value="Paid / Ready" ${order.status === 'Paid / Ready' ? 'selected' : ''}>Paid / Ready</option>
+                                <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold text-gray-900">$${parseFloat(order.total).toFixed(2)}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button onclick="viewCustomerDetails('${order.customer_address.replace(/'/g, "\\'")}')" class="text-gray-400 hover:text-brand-500 transition"><i class="fa-solid fa-location-dot"></i></button>
+                        </td>
+                    </tr>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error(err);
+                tableBody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-red-500">Error: ${err.message}</td></tr>`;
+            }
+        }
+
+        async function updateStatus(orderId, newStatus) {
+            try {
+                const { error } = await _supabase
+                    .from('orders')
+                    .update({ status: newStatus })
+                    .eq('id', orderId);
+
+                if (error) throw error;
+                // Reload table to update colors
+                loadOrders();
+            } catch (err) {
+                alert("Failed to update status: " + err.message);
+            }
+        }
+
+        function viewCustomerDetails(address) {
+            alert("Delivery Address:\n" + address);
+        }
+
+        // Shared Auth Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = localStorage.getItem('userRole');
+            if (userRole !== 'admin' && userRole !== 'manager') {
+                // In real app, redirect
+            }
+            loadOrders();
+        });
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRole');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

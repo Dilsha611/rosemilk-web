@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosemilk Staff Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --rose-pink: #fbc2eb;
+            --soft-pink: #f8c8dc;
+            --deep-rose: #d16ba5;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b24 100%);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-image {
+            width: 50%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)),
+                url('https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            padding: 50px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .login-image {
+                display: none;
+            }
+
+            .login-form {
+                padding: 40px 20px;
+            }
+        }
+
+        .login-image h2 {
+            font-size: 45px;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            font-style: italic;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 40px 50px;
+            text-align: center;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand-name {
+            font-size: 35px;
+            font-weight: 700;
+            color: #333;
+            letter-spacing: 2px;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 5px;
+        }
+
+        .role-selector {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 30px;
+            padding: 5px;
+            margin: 25px 0;
+            border: 1px solid #eee;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .role-btn.active {
+            background: #333;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #eee;
+            border-radius: 15px;
+            outline: none;
+            background: #fafafa;
+        }
+
+        .input-field:focus {
+            border-color: #333;
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            padding: 16px;
+            background: #333;
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .sign-in-btn:hover {
+            transform: translateY(-2px);
+            background: #000;
+        }
+
+        .back-link {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+            display: block;
+        }
+
+        .back-link:hover {
+            color: var(--deep-rose);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-image">
+            <h2>Staff Portal ✨</h2>
+            <p>Access the administrative dashboard to manage Rosemilk operations.</p>
+        </div>
+
+        <div class="login-form">
+            <div class="brand-name">ROSEMILK STAFF</div>
+            <p style="color: #888; font-size: 12px; margin-top: 0; letter-spacing: 1px;">Internal Management System</p>
+
+            <div class="role-selector">
+                <button class="role-btn active" onclick="setRole(this)">Manager</button>
+                <button class="role-btn" onclick="setRole(this)">Admin</button>
+                <button class="role-btn" onclick="setRole(this)">Inventory</button>
+            </div>
+
+            <div class="input-group">
+                <label>Staff Email</label>
+                <input type="email" class="input-field" id="email" placeholder="staff@rosemilk.lk">
+            </div>
+
+            <div class="input-group">
+                <label>Security Password</label>
+                <input type="password" class="input-field" id="password" placeholder="••••••••">
+            </div>
+
+            <button class="sign-in-btn" onclick="handleLogin()">Sign In to Portal</button>
+
+            <a href="login.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Customer Login</a>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'Manager';
+
+        function setRole(btn) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentRole = btn.innerText;
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            const role = currentRole.toLowerCase();
+
+            if (!email || !pass) return alert('Enter credentials');
+
+            const roleData = {
+                'admin': { email: 'admin@rosemilk.lk', pass: '123456', page: 'admin-dashboard.html' },
+                'manager': { email: 'manager@rosemilk.lk', pass: '123456', page: 'admin-dashboard.html' },
+                'inventory': { email: 'inventory@rosemilk.lk', pass: '123456', page: 'inventory-dashboard.html' }
+            };
+
+            if (roleData[role] && email === roleData[role].email && pass === roleData[role].pass) {
+                localStorage.setItem('currentUser', email);
+                localStorage.setItem('userRole', role);
+                alert('Staff Login Successful!');
+                window.location.href = roleData[role].page;
+            } else {
+                alert('Invalid Staff Credentials');
+            }
+        }
+    </script>
+
+</body>
+
+</html>

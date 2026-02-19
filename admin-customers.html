@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers - Rosemilk Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff0f3',
+                            100: '#ffe3e8',
+                            200: '#ffc9d6',
+                            300: '#ff9fb6',
+                            400: '#ff6b8e',
+                            500: '#f73b68',
+                            600: '#e31b4b',
+                            700: '#bf0e36',
+                            800: '#9e0d2d',
+                            900: '#850f29',
+                        },
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-sans antialiased text-gray-800 bg-gray-50 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
+        <div class="h-20 flex items-center justify-center border-b border-gray-100">
+            <a href="index.html" class="flex items-center gap-2">
+                <i class="fa-solid fa-rose text-brand-500 text-2xl"></i>
+                <span class="font-serif text-2xl font-bold text-gray-900">Rosemilk</span>
+            </a>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            <a href="admin-dashboard.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+            </a>
+            <a href="admin-products.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-box w-5"></i> Products
+            </a>
+            <a href="admin-orders.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-shopping-bag w-5"></i> Orders
+                <span class="ml-auto bg-brand-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">23</span>
+            </a>
+            <a href="admin-customers.html"
+                class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-600 rounded-lg font-medium">
+                <i class="fa-solid fa-users w-5"></i> Customers
+            </a>
+            <a href="admin-settings.html"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-brand-600 rounded-lg font-medium transition">
+                <i class="fa-solid fa-gear w-5"></i> Settings
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="#" onclick="logout()"
+                class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 transition">
+                <i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Header -->
+        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <h2 class="text-xl font-bold text-gray-800">Customers</h2>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=f73b68&color=fff" alt="Admin"
+                        class="w-10 h-10 rounded-full border-2 border-brand-100">
+                    <div class="hidden sm:block">
+                        <p class="text-sm font-bold text-gray-900" id="user-name">Admin User</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-auto p-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-900">Registered Customers</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            <i class="fa-solid fa-filter mr-1"></i> Filter
+                        </button>
+                        <button
+                            class="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200">Export</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-gray-600">
+                        <thead class="bg-gray-50 text-xs uppercase font-medium text-gray-500">
+                            <tr>
+                                <th class="px-6 py-4">Customer</th>
+                                <th class="px-6 py-4">Contact Info</th>
+                                <th class="px-6 py-4">Join Date</th>
+                                <th class="px-6 py-4">Orders</th>
+                                <th class="px-6 py-4">Total Spent</th>
+                                <th class="px-6 py-4">Status</th>
+                                <th class="px-6 py-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 text-sm" id="customers-table-body">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                    <span class="text-xs text-gray-500">Showing 10 of 845 customers</span>
+                    <div class="flex gap-1">
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                            disabled>Prev</button>
+                        <button class="px-3 py-1 rounded border border-gray-300 bg-brand-500 text-white">1</button>
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">2</button>
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">3</button>
+                        <button
+                            class="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Generate Dummy Customers
+        const customerNames = [
+            'Sarah Jenkins', 'Mike Ross', 'Emma Watson', 'John Doe', 'Jane Smith',
+            'Peter Parker', 'Tony Stark', 'Bruce Wayne', 'Clark Kent', 'Diana Prince',
+            'Barry Allen', 'Hal Jordan', 'Arthur Curry', 'Victor Stone', 'Steve Rogers'
+        ];
+
+        const tableBody = document.getElementById('customers-table-body');
+
+        let html = '';
+        customerNames.forEach((name, index) => {
+            const email = name.toLowerCase().replace(' ', '.') + '@gmail.com';
+            const phone = '+94 7' + Math.floor(Math.random() * 9) + ' ' + Math.floor(Math.random() * 10000000).toString().padStart(7, '0');
+            const joinDate = new Date();
+            joinDate.setMonth(joinDate.getMonth() - Math.floor(Math.random() * 12));
+            const dateStr = joinDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const orders = Math.floor(Math.random() * 20) + 1;
+            const spent = (orders * (30 + Math.random() * 50)).toFixed(2);
+            const status = Math.random() > 0.1 ?
+                '<span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>' :
+                '<span class="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Inactive</span>';
+
+            html += `
+            <tr class="hover:bg-gray-50 transition">
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <img src="https://ui-avatars.com/api/?name=${name.replace(' ', '+')}&background=random" class="w-10 h-10 rounded-full">
+                        <div>
+                            <p class="font-medium text-gray-900">${name}</p>
+                            <p class="text-xs text-gray-400">ID: CST-${8450 - index}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <p class="text-gray-900">${email}</p>
+                    <p class="text-xs text-gray-500">${phone}</p>
+                </td>
+                <td class="px-6 py-4">${dateStr}</td>
+                <td class="px-6 py-4 font-medium">${orders} Orders</td>
+                <td class="px-6 py-4 font-bold text-gray-900">$${spent}</td>
+                <td class="px-6 py-4">${status}</td>
+                <td class="px-6 py-4 text-center">
+                    <button class="text-gray-400 hover:text-brand-500 p-2 rounded-full hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-red-50 transition">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            `;
+        });
+        tableBody.innerHTML = html;
+
+        // Shared Auth Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const userEmail = localStorage.getItem('currentUser');
+            if (userEmail) {
+                const nameDisplay = document.getElementById('user-name');
+                if (nameDisplay) nameDisplay.textContent = userEmail.split('@')[0];
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRole');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

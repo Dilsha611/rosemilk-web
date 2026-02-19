@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Dashboard - Rosemilk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <nav class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">Inventory Panel</h1>
+        <button onclick="logout()" class="text-red-500 font-medium">Logout</button>
+    </nav>
+    <main class="p-6 max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">Stock Management</h2>
+            <button class="bg-brand-500 text-white px-4 py-2 rounded-lg text-sm font-bold">Add New Stock</button>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 border-b">
+                    <tr>
+                        <th class="px-6 py-4">Product Name</th>
+                        <th class="px-6 py-4">Category</th>
+                        <th class="px-6 py-4">In Stock</th>
+                        <th class="px-6 py-4">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    <tr>
+                        <td class="px-6 py-4 font-bold">Rosemilk Serum</td>
+                        <td class="px-6 py-4 text-gray-500">Skincare</td>
+                        <td class="px-6 py-4">45 Units</td>
+                        <td class="px-6 py-4"><span
+                                class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-bold">Hydrating Mist</td>
+                        <td class="px-6 py-4 text-gray-500">Skincare</td>
+                        <td class="px-6 py-4 text-red-500">5 Units</td>
+                        <td class="px-6 py-4"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs">Low
+                                Stock</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosemilk Luxury Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --rose-pink: #fbc2eb;
+            --soft-pink: #f8c8dc;
+            --deep-rose: #d16ba5;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff5f7 0%, #fbc2eb 100%);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(209, 107, 165, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .login-image {
+            width: 50%;
+            background: linear-gradient(to bottom, rgba(209, 107, 165, 0.1), rgba(0, 0, 0, 0.4)),
+                url('https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            padding: 50px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .login-image {
+                display: none;
+            }
+
+            .login-form {
+                padding: 40px 20px;
+            }
+        }
+
+        .login-image h2 {
+            font-size: 45px;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            font-style: italic;
+        }
+
+        .login-image p {
+            font-size: 17px;
+            line-height: 1.6;
+            font-weight: 300;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 40px 50px;
+            text-align: center;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand-name {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--deep-rose);
+            letter-spacing: 4px;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #7d5a6a;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid #f2dae5;
+            border-radius: 15px;
+            box-sizing: border-box;
+            outline: none;
+            background: #fffafa;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #d16ba5, #fbc2eb);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(209, 107, 165, 0.3);
+            transition: 0.3s;
+        }
+
+        .sign-in-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .google-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border: 1px solid #f2dae5;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-image">
+            <h2>Naturally Pretty ✨</h2>
+            <p>Experience the luxury of nature. Access your account to manage your skincare essentials.</p>
+        </div>
+
+        <div class="login-form">
+            <div class="brand-name">ROSEMILK LOGIN</div>
+            <p style="color: #a38995; font-size: 14px; margin-top: 0; letter-spacing: 1px;">PREMIUM LUXURY SKINCARE</p>
+
+            <div class="input-group" style="margin-top: 30px;">
+                <label>Email Address</label>
+                <input type="email" class="input-field" id="email" placeholder="yourname@gmail.com">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" class="input-field" id="password" placeholder="••••••••">
+            </div>
+
+            <button class="sign-in-btn" onclick="handleLogin()">Sign In to Your Account</button>
+
+            <button class="google-btn">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="18px"> Continue with
+                Google
+            </button>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f2dae5;">
+                <p style="font-size: 13px; color: #888; margin-bottom: 10px;">
+                    New to Rosemilk? <a href="signup.html"
+                        style="color: var(--deep-rose); font-weight: 600; text-decoration: none;">Create Account</a>
+                </p>
+                <a href="staff-login.html"
+                    style="font-size: 12px; color: #a38995; text-decoration: underline; font-weight: 500;">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Staff & Admin Portal
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const email = document.getElementById('email').value.toLowerCase();
+            const pass = document.getElementById('password').value;
+
+            if (!email || !pass) {
+                return alert('Please enter both email and password');
+            }
+
+            // Staff & Admin Smart Detection
+            const staffAccounts = {
+                'admin@rosemilk.lk': { role: 'admin', page: 'admin-dashboard.html' },
+                'manager@rosemilk.lk': { role: 'manager', page: 'admin-dashboard.html' },
+                'inventory@rosemilk.lk': { role: 'inventory', page: 'inventory-dashboard.html' },
+                'delivery@rosemilk.lk': { role: 'delivery', page: 'delivery-dashboard.html' },
+                'support@rosemilk.lk': { role: 'support', page: 'support-dashboard.html' }
+            };
+
+            if (staffAccounts[email]) {
+                const account = staffAccounts[email];
+                // For demo, internal password is '123456'
+                if (pass === '123456') {
+                    localStorage.setItem('currentUser', email);
+                    localStorage.setItem('userRole', account.role);
+                    alert(`Access Granted: ${account.role.toUpperCase()} Portal Loading...`);
+                    window.location.href = account.page;
+                    return;
+                } else {
+                    return alert('Invalid Staff Password');
+                }
+            }
+
+            // Regular Customer Logic
+            localStorage.setItem('currentUser', email);
+            localStorage.setItem('userRole', 'customer');
+
+            alert(`Welcome back, ${email.split('@')[0]}! Redirecting to shop...`);
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                document.documentElement.style.display = 'none';
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <title>Our Shop - Rosemilk Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff0f3',
+                            100: '#ffe3e8',
+                            200: '#ffc9d6',
+                            300: '#ff9fb6',
+                            400: '#ff6b8e',
+                            500: '#f73b68',
+                            600: '#e31b4b',
+                            700: '#bf0e36',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-brand-50/30 font-sans antialiased text-gray-800">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <i class="fa-solid fa-rose text-brand-500 text-2xl"></i>
+                <span class="font-serif text-2xl font-bold tracking-tight text-gray-900">Rosemilk</span>
+            </a>
+
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex space-x-8 font-medium">
+                    <a href="index.html" class="hover:text-brand-500 transition">Home</a>
+                    <a href="products.html" class="text-brand-600">Shop</a>
+                    <a href="reviews.html" class="hover:text-brand-500 transition">Reviews</a>
+                    <a href="about.html" class="hover:text-brand-500 transition">Our Story</a>
+                    <button onclick="logout()" class="text-gray-600 font-medium hover:text-red-500 transition"
+                        title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-xl"></i>
+                    </button>
+                </div>
+                <!-- Cart Button -->
+                <button onclick="toggleCart()" class="relative p-2 text-gray-700 hover:text-brand-500 transition">
+                    <i class="fa-solid fa-cart-shopping text-2xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-1 -right-1 bg-brand-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center ml-2">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-xl overflow-hidden">
+            <div class="px-4 pt-4 pb-8 space-y-3">
+                <a href="index.html"
+                    class="block px-4 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Home</a>
+                <a href="products.html" class="block px-4 py-3 text-brand-600 font-bold bg-brand-50 rounded-xl">Shop</a>
+                <a href="reviews.html"
+                    class="block px-4 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Reviews</a>
+                <a href="about.html" class="block px-4 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Our
+                    Story</a>
+                <hr class="border-gray-100 my-2">
+                <button onclick="logout()"
+                    class="w-full text-left px-4 py-3 text-red-500 font-bold hover:bg-red-50 rounded-xl">
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="pt-32 pb-12 text-center bg-gradient-to-b from-brand-100/50 to-transparent">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">Our Collection</h1>
+        <p class="text-gray-500 max-w-lg mx-auto">Discover our curated selection of rose-infused beauty essentials for a
+            naturally radiant glow.</p>
+    </header>
+
+    <!-- Filters & Search Section -->
+    <section class="max-w-7xl mx-auto px-4 mb-12">
+        <div class="flex flex-col md:flex-row gap-6 justify-between items-center">
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-96 group">
+                <i
+                    class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-500 transition-colors"></i>
+                <input type="text" id="search-input" oninput="filterProducts()" placeholder="Search products..."
+                    class="w-full pl-12 pr-5 py-4 rounded-2xl border border-brand-100 bg-white shadow-sm focus:ring-2 focus:ring-brand-200 outline-none transition-all placeholder:text-gray-400">
+            </div>
+
+            <!-- Categories & Skin Type -->
+            <div class="flex flex-col gap-4 w-full md:w-auto">
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                    <button onclick="setCategory('All')"
+                        class="category-btn active px-6 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all">All
+                        Collections</button>
+                    <button onclick="setCategory('Face Care')"
+                        class="category-btn px-6 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all">Face
+                        Care</button>
+                    <button onclick="setCategory('Body Care')"
+                        class="category-btn px-6 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all">Body
+                        Care</button>
+                </div>
+                <!-- Skin Type Filter -->
+                <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                    <span class="text-xs font-bold text-gray-400 self-center mr-2 uppercase tracking-widest">Skin
+                        Type:</span>
+                    <button onclick="setSkinType('All')"
+                        class="skin-btn active px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all border border-brand-100">All</button>
+                    <button onclick="setSkinType('Oily')"
+                        class="skin-btn px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all border border-brand-100">Oily</button>
+                    <button onclick="setSkinType('Dry')"
+                        class="skin-btn px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all border border-brand-100">Dry</button>
+                    <button onclick="setSkinType('Sensitive')"
+                        class="skin-btn px-4 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all border border-brand-100">Sensitive</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .category-btn,
+        .skin-btn {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #ffe3e8;
+        }
+
+        .category-btn.active,
+        .skin-btn.active {
+            background: #f73b68;
+            color: white;
+            border-color: #f73b68;
+            box-shadow: 0 4px 12px rgba(247, 59, 104, 0.2);
+        }
+    </style>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .category-btn {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #ffe3e8;
+        }
+
+        .category-btn.active {
+            background: #f73b68;
+            color: white;
+            border-color: #f73b68;
+            box-shadow: 0 4px 12px rgba(247, 59, 104, 0.2);
+        }
+    </style>
+
+    <!-- Products Grid -->
+    <main class="max-w-7xl mx-auto px-4 pb-20">
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full py-20 flex flex-col items-center justify-center text-gray-400">
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-4 text-brand-300"></i>
+                <p>Loading premium products...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar"
+        class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="p-6 h-full flex flex-col">
+            <div class="flex justify-between items-center mb-8 border-b pb-4">
+                <h2 class="text-2xl font-bold font-serif text-gray-900">Your Cart</h2>
+                <button onclick="toggleCart()"
+                    class="text-gray-400 hover:text-gray-600 text-3xl transition">&times;</button>
+            </div>
+
+            <div id="cart-items" class="flex-grow overflow-y-auto space-y-6">
+                <p class="text-center text-gray-400 mt-10">Your cart is empty.</p>
+            </div>
+
+            <div class="border-t pt-6 mt-4">
+                <div class="flex justify-between text-xl font-bold mb-6 text-gray-900">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button onclick="sendWhatsAppOrder()"
+                    class="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition shadow-lg shadow-green-500/20">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    Order via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-[150] flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCheckout()"></div>
+        <div class="bg-white rounded-[32px] w-full max-w-lg relative z-10 p-8 shadow-2xl overflow-hidden">
+            <h3 class="text-2xl font-serif font-bold text-gray-900 mb-2 text-center text-brand-600">Complete Your Order
+                🌹</h3>
+            <p class="text-gray-500 text-center mb-8 text-sm italic">Please provide your delivery details so we can
+                process your order.</p>
+
+            <form id="checkoutForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Full
+                        Name</label>
+                    <input type="text" id="order-name" required placeholder="Ex: Samantha Perera"
+                        class="w-full px-5 py-3.5 rounded-xl border border-brand-100 bg-brand-50/30 focus:ring-2 focus:ring-brand-200 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Phone
+                        Number</label>
+                    <input type="tel" id="order-phone" required placeholder="Ex: 077 123 4567"
+                        class="w-full px-5 py-3.5 rounded-xl border border-brand-100 bg-brand-50/30 focus:ring-2 focus:ring-brand-200 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Delivery
+                        Address</label>
+                    <textarea id="order-address" required rows="3" placeholder="Enter your full address here..."
+                        class="w-full px-5 py-3.5 rounded-xl border border-brand-100 bg-brand-50/30 focus:ring-2 focus:ring-brand-200 outline-none transition-all resize-none"></textarea>
+                </div>
+
+                <div class="bg-brand-50 p-4 rounded-xl border border-brand-100 mt-4">
+                    <div class="flex justify-between font-bold text-gray-900">
+                        <span>Grand Total:</span>
+                        <span id="checkout-total-display">$0.00</span>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-final-checkout"
+                    class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-brand-500 transition-all shadow-xl hover:shadow-brand-500/30 mt-4">
+                    Confirm & Open WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-md" onclick="closeModal()"></div>
+        <div
+            class="bg-white rounded-[40px] w-full max-w-4xl relative z-10 overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+            <div id="modal-image" class="w-full md:w-1/2 h-64 md:h-auto bg-cover bg-center"></div>
+            <div class="p-8 md:p-12 flex-1 overflow-y-auto">
+                <button onclick="closeModal()"
+                    class="absolute top-6 right-8 text-gray-400 hover:text-gray-600 text-3xl">&times;</button>
+                <div id="modal-category" class="text-xs font-bold text-brand-500 uppercase tracking-widest mb-2">
+                    Category</div>
+                <h2 id="modal-name" class="text-3xl font-serif font-bold text-gray-900 mb-4">Product Name</h2>
+                <div id="modal-price" class="text-2xl font-bold text-gray-900 mb-6">$0.00</div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">✨ Key Ingredients</h4>
+                        <div id="modal-ingredients" class="flex flex-wrap gap-2">
+                            <!-- Ingredients Icons -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">🌿 Why it's pure</h4>
+                        <div id="modal-free-from" class="flex flex-wrap gap-3">
+                            <!-- Free from labels -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">👤 Best For</h4>
+                        <div id="modal-skin-type" class="text-gray-600">All skin types</div>
+                    </div>
+                </div>
+
+                <button id="modal-add-btn"
+                    class="w-full mt-10 bg-gray-900 text-white py-4 rounded-2xl font-bold hover:bg-brand-500 transition shadow-lg">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trust & Social Proof Section -->
+    <section class="max-w-7xl mx-auto px-4 py-20 border-t border-brand-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <div class="flex flex-col items-center">
+                <div
+                    class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mb-4 text-brand-500 text-2xl">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <h3 class="font-serif font-bold text-xl mb-2">Dermatologist Tested</h3>
+                <p class="text-gray-500 text-sm">Our formulas are clinically proven and recommended by skincare experts.
+                </p>
+            </div>
+            <div class="flex flex-col items-center">
+                <div
+                    class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mb-4 text-brand-500 text-2xl">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <h3 class="font-serif font-bold text-xl mb-2">100% Cruelty Free</h3>
+                <p class="text-gray-500 text-sm">We never test on animals and use ethically sourced ingredients.</p>
+            </div>
+            <div class="flex flex-col items-center">
+                <div
+                    class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mb-4 text-brand-500 text-2xl">
+                    <i class="fa-solid fa-medal"></i>
+                </div>
+                <h3 class="font-serif font-bold text-xl mb-2">Verified Results</h3>
+                <p class="text-gray-500 text-sm">95% of our users report glowing skin within 14 days of use.</p>
+            </div>
+        </div>
+
+        <!-- Before/After Placeholder -->
+        <div class="mt-20">
+            <h2 class="text-3xl font-serif font-bold text-center mb-12">Real People, Real Results</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Placeholder Before/After Cards -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-100">
+                    <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc2069?q=80&w=400"
+                        class="w-full h-48 object-cover">
+                    <div class="p-4 text-center">
+                        <div class="flex justify-center text-yellow-400 mb-2">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-xs italic text-gray-500">"My dark spots faded in 2 weeks!"</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-100">
+                    <img src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=400"
+                        class="w-full h-48 object-cover">
+                    <div class="p-4 text-center">
+                        <div class="flex justify-center text-yellow-400 mb-2">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-xs italic text-gray-500">"The best moisturizer for oily skin."</p>
+                    </div>
+                </div>
+                <!-- Add more as needed -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Overlay for Cart -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[90] hidden">
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://dyptudqbdygqkjnqizxt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_1ybwmjWUlErvgvRAuNVVNw_duKOSDtl';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let cart = [];
+        let allProducts = [];
+        let currentCategory = 'All';
+        let currentSkinType = 'All';
+
+        // 1. Fetch Products from Supabase
+        async function loadProducts() {
+            const grid = document.getElementById('products-grid');
+            try {
+                const { data: products, error } = await _supabase
+                    .from('products')
+                    .select('*')
+                    .order('id', { ascending: false });
+
+                if (error) throw error;
+
+                allProducts = products || [];
+                renderProducts(allProducts);
+
+            } catch (error) {
+                console.error("Error loading products:", error);
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500">Failed to load the collection. Please try again.</div>';
+            }
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('products-grid');
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500">No products match your search.</div>';
+                return;
+            }
+
+            grid.innerHTML = products.map(p => `
+                <div class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-brand-100 hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-500">
+                    <div class="relative h-72 overflow-hidden cursor-pointer" onclick="openQuickView(${p.id})">
+                        <img src="${p.image_url || 'https://via.placeholder.com/400'}" 
+                             class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
+                             onerror="this.src='https://via.placeholder.com/400?text=Product+Image'">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-600">
+                            Quick View <i class="fa-solid fa-eye ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <div class="text-xs font-bold text-brand-400 uppercase tracking-widest mb-2">${p.category || 'Skincare'}</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 font-serif">${p.name}</h3>
+                        <div class="flex justify-between items-center mt-6">
+                            <span class="text-2xl font-bold text-gray-900">$${parseFloat(p.price).toFixed(2)}</span>
+                            <button onclick="addToCart('${p.name.replace(/'/g, "\\'")}', ${p.price})" 
+                                    class="bg-gray-900 hover:bg-brand-500 text-white px-6 py-2.5 rounded-full text-sm font-bold transition shadow-lg shadow-gray-900/10 hover:shadow-brand-500/20">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            const filtered = allProducts.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(searchTerm);
+                const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
+
+                // Smart Skin Type Filter
+                const pType = (p.skin_type || 'All').toLowerCase();
+                const matchesSkin = currentSkinType === 'All' ||
+                    pType.includes(currentSkinType.toLowerCase()) ||
+                    pType.includes('all');
+
+                return matchesSearch && matchesCategory && matchesSkin;
+            });
+
+            renderProducts(filtered);
+        }
+
+        function setCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.innerText.includes(category)) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            filterProducts();
+        }
+
+        function setSkinType(skinType) {
+            currentSkinType = skinType;
+            document.querySelectorAll('.skin-btn').forEach(btn => {
+                if (btn.innerText === skinType) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            filterProducts();
+        }
+
+        // --- Details Modal Logic ---
+        function openQuickView(id) {
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modal-image').style.backgroundImage = `url('${product.image_url}')`;
+            document.getElementById('modal-name').innerText = product.name;
+            document.getElementById('modal-category').innerText = product.category || 'Luxury Collection';
+            document.getElementById('modal-price').innerText = `$${parseFloat(product.price).toFixed(2)}`;
+
+            // Ingredients Demo (In real app, this comes from DB)
+            const ingredients = ['Vitamin C', 'Aloe Vera', 'Rose Extract', 'Hyaluronic Acid'];
+            document.getElementById('modal-ingredients').innerHTML = ingredients.map(ing => `
+                <span class="bg-brand-50 text-brand-600 px-3 py-1.5 rounded-full text-[10px] font-bold border border-brand-100 flex items-center gap-1">
+                    <i class="fa-solid fa-check"></i> ${ing}
+                </span>
+            `).join('');
+
+            // Free from Demo
+            const freeFrom = ['Paraben Free', 'Sulfate Free', 'Cruelty Free', 'Natural'];
+            document.getElementById('modal-free-from').innerHTML = freeFrom.map(label => `
+                <div class="flex items-center gap-2 text-xs text-gray-500">
+                    <i class="fa-solid fa-shield-heart text-brand-400"></i> ${label}
+                </div>
+            `).join('');
+
+            document.getElementById('modal-skin-type').innerText = product.skin_type || 'Suitable for All Skin Types';
+
+            document.getElementById('modal-add-btn').onclick = () => addToCart(product.name, product.price);
+
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 2. Cart Functionality
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+            // Show auto-open effect or a tiny toast
+            document.getElementById('cart-sidebar').classList.remove('translate-x-full');
+            document.getElementById('cart-overlay').classList.remove('hidden');
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            sidebar.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function updateCartUI() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartCountLabel = document.getElementById('cart-count');
+            const cartTotalLabel = document.getElementById('cart-total');
+
+            cartCountLabel.innerText = cart.length;
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p class="text-center text-gray-400 mt-20">Your cart looks empty.</p>';
+                cartTotalLabel.innerText = "$0.00";
+                return;
+            }
+
+            let total = 0;
+            cartItemsDiv.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="flex items-center gap-4 group">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-gray-900 truncate">${item.name}</h4>
+                            <p class="text-brand-500 font-bold">$${item.price.toFixed(2)}</p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-gray-300 hover:text-red-500 transition-colors">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            cartTotalLabel.innerText = `$${total.toFixed(2)}`;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // 3. Checkout with WhatsApp & Bank Details
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) return alert("Please add items to your cart first.");
+
+            // Calculate Total
+            let total = 0;
+            cart.forEach(item => total += item.price);
+
+            // Show Checkout Modal
+            document.getElementById('checkout-total-display').innerText = `$${total.toFixed(2)}`;
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            toggleCart(); // Close sidebar
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('checkoutForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-final-checkout');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Creating Order...';
+
+            const name = document.getElementById('order-name').value;
+            const phone = document.getElementById('order-phone').value;
+            const address = document.getElementById('order-address').value;
+
+            let total = 0;
+            let itemsString = "";
+            cart.forEach((item, i) => {
+                total += item.price;
+                itemsString += `${item.name}${i < cart.length - 1 ? ', ' : ''}`;
+            });
+
+            try {
+                // 1. Save to Supabase
+                const { data, error } = await _supabase.from('orders').insert([{
+                    customer_name: name,
+                    customer_phone: phone,
+                    customer_address: address,
+                    items: itemsString,
+                    total: total,
+                    status: 'Pending Payment'
+                }]).select();
+
+                if (error) throw error;
+
+                const orderId = data[0].id;
+
+                // 2. Prepare WhatsApp Message
+                const phoneNumber = "94772788324";
+                let message = `*🌹 New Rosemilk Order #ORD-${orderId} 🌹*\n\n`;
+                message += `*Customer:* ${name}\n`;
+                message += `*Phone:* ${phone}\n`;
+                message += `*Address:* ${address}\n\n`;
+                message += `*Items:*\n`;
+                cart.forEach((item, i) => {
+                    message += `${i + 1}. ${item.name} - $${item.price.toFixed(2)}\n`;
+                });
+                message += `\n*TOTAL: $${total.toFixed(2)}*`;
+                message += `\n\nI have placed order #${orderId}. Please confirm my payment!`;
+
+                // 3. Open WhatsApp
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+
+                // 4. Show Payment Instructions
+                showBankDetails(total.toFixed(2), orderId);
+
+                // Clear Cart
+                cart = [];
+                updateCartUI();
+                closeCheckout();
+
+            } catch (err) {
+                alert("Order Error: " + err.message);
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Confirm & Open WhatsApp';
+            }
+        };
+
+        function showBankDetails(total, orderId) {
+            const bankInfo = `
+✨ ORDER #${orderId} PLACED! ✨
+
+Please complete payment to process delivery:
+
+Total: $${total}
+Order ID: #ORD-${orderId}
+
+Bank Details:
+---------------------------------
+🏦 Bank: Bank of Ceylon (BOC)
+👤 Name: Rosemilk Beauty (Pvt) Ltd
+🔢 Acc No: 1234567890
+📍 Branch: Colombo Central
+
+👉 Send your receipt & Order ID (#ORD-${orderId}) on WhatsApp. 
+Thank you! 🌹
+            `;
+            alert(bankInfo);
+        }
+
+        // Initialize Shop
+        window.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/94772788324?text=Hello Rosemilk! I'd like to ask about..." target="_blank"
+        class="fixed bottom-8 right-8 z-[120] group">
+        <div
+            class="absolute -inset-2 bg-green-500 rounded-full blur opacity-20 group-hover:opacity-40 animate-pulse transition">
+        </div>
+        <div
+            class="relative bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform group-hover:scale-110 active:scale-95">
+            <i class="fa-brands fa-whatsapp text-2xl"></i>
+            <span
+                class="absolute right-full mr-4 bg-white text-gray-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-brand-100">
+                Need Help? Chat with us! 🌹
+            </span>
+        </div>
+    </a>
+    <script src="script.js"></script>
+</body>
+
+</html>

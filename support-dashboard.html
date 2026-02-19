@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Dashboard - Rosemilk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <nav class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">Support Panel</h1>
+        <button onclick="logout()" class="text-red-500 font-medium">Logout</button>
+    </nav>
+    <main class="p-6 max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold mb-6">Customer Inquiry Requests</h2>
+        <div class="space-y-4">
+            <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                <div class="flex justify-between mb-3">
+                    <span class="font-bold">Nimal Sirisena</span>
+                    <span class="text-xs text-gray-400">10 mins ago</span>
+                </div>
+                <p class="text-gray-600 text-sm mb-4">"I received my order, but there was a leaking problem in the
+                    bottle. Can I get a replacement?"</p>
+                <div class="flex gap-2">
+                    <button class="bg-gray-900 text-white px-4 py-2 rounded text-xs font-bold">Reply</button>
+                    <button class="border border-gray-200 px-4 py-2 rounded text-xs">Mark as Resolved</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>

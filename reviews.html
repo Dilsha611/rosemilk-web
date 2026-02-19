@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                document.documentElement.style.display = 'none';
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <title>Customer Reviews - Rosemilk Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff0f3', 100: '#ffe3e8', 200: '#ffc9d6', 300: '#ff9fb6',
+                            400: '#ff6b8e', 500: '#f73b68', 600: '#e31b4b', 700: '#bf0e36',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-brand-50/30 font-sans antialiased text-gray-800">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <i class="fa-solid fa-rose text-brand-500 text-2xl"></i>
+                <span class="font-serif text-2xl font-bold tracking-tight text-gray-900">Rosemilk</span>
+            </a>
+
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="index.html" class="hover:text-brand-500 transition">Home</a>
+                <a href="products.html" class="hover:text-brand-500 transition">Shop</a>
+                <a href="about.html" class="hover:text-brand-500 transition">Our Story</a>
+                <a href="reviews.html" class="text-brand-600">Reviews</a>
+                <button onclick="logout()" class="text-gray-600 font-medium hover:text-red-500 transition"
+                    title="Logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <a href="products.html"
+                class="hidden md:block bg-brand-500 text-white px-6 py-2 rounded-full font-bold shadow-lg shadow-brand-500/20 hover:bg-brand-600 transition">Buy
+                Now</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu"
+        class="hidden fixed top-20 left-0 w-full bg-white z-[100] border-t border-gray-100 shadow-xl overflow-hidden">
+        <div class="px-4 pt-4 pb-8 space-y-3">
+            <a href="index.html" class="block px-4 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Home</a>
+            <a href="products.html"
+                class="block px-4 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Shop</a>
+            <a href="about.html" class="block px-4 py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl">Our
+                Story</a>
+            <a href="reviews.html" class="block px-4 py-3 text-brand-600 font-bold bg-brand-50 rounded-xl">Reviews</a>
+            <hr class="border-gray-100 my-2">
+            <button onclick="logout()"
+                class="w-full text-left px-4 py-3 text-red-500 font-bold hover:bg-red-50 rounded-xl">
+                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="pt-40 pb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">Customer Stories ✨</h1>
+        <p class="text-gray-500 max-w-lg mx-auto leading-relaxed">Hear what our beautiful community has to say about
+            their Rosemilk journey.</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pb-20">
+        <!-- Review Form Card -->
+        <div class="bg-white rounded-[40px] p-8 md:p-12 shadow-xl shadow-brand-500/5 border border-brand-100 mb-16">
+            <h2 class="text-2xl font-serif font-bold text-gray-900 mb-8 text-center">Share Your Glow Experience</h2>
+
+            <form id="reviewForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Your Full Name</label>
+                    <input type="text" id="reviewerName" required placeholder="Ex: Sarah Perera"
+                        class="w-full px-6 py-4 rounded-2xl border border-brand-100 bg-brand-50/30 focus:ring-2 focus:ring-brand-200 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Rate Your Experience</label>
+                    <select id="rating"
+                        class="w-full px-6 py-4 rounded-2xl border border-brand-100 bg-brand-50/30 focus:ring-2 focus:ring-brand-200 outline-none transition-all appearance-none cursor-pointer">
+                        <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                        <option value="4">⭐⭐⭐⭐ (Very Good)</option>
+                        <option value="3">⭐⭐⭐ (Average)</option>
+                        <option value="2">⭐⭐ (Poor)</option>
+                        <option value="1">⭐ (Terrible)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Your Honest Review</label>
+                    <textarea id="reviewText" required rows="4" placeholder="How did Rosemilk change your skin routine?"
+                        class="w-full px-6 py-4 rounded-2xl border border-brand-100 bg-brand-50/30 focus:ring-2 focus:ring-brand-200 outline-none transition-all resize-none"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-gray-900 text-white py-5 rounded-2xl font-bold text-lg hover:bg-brand-500 transition-all shadow-xl hover:shadow-brand-500/30">
+                    Post My Review
+                </button>
+            </form>
+        </div>
+
+        <div class="flex items-center gap-4 mb-10">
+            <div class="h-[1px] flex-grow bg-brand-100"></div>
+            <span class="text-brand-400 font-bold uppercase tracking-widest text-xs">Community Feedback</span>
+            <div class="h-[1px] flex-grow bg-brand-100"></div>
+        </div>
+
+        <!-- Loader -->
+        <div id="loader" class="text-center py-20 hidden">
+            <i class="fa-solid fa-spinner fa-spin text-3xl text-brand-300"></i>
+            <p class="mt-4 text-gray-400">Loading beautiful stories...</p>
+        </div>
+
+        <!-- Reviews List -->
+        <div id="reviewsList" class="grid gap-8">
+            <!-- Review cards will appear here -->
+        </div>
+    </main>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/94772788324" target="_blank" class="fixed bottom-8 right-8 z-50 group">
+        <div
+            class="bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform group-hover:scale-110 active:scale-95">
+            <i class="fa-brands fa-whatsapp text-2xl"></i>
+        </div>
+    </a>
+
+    <script>
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = 'https://dyptudqbdygqkjnqizxt.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_1ybwmjWUlErvgvRAuNVVNw_duKOSDtl';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 1. Load Reviews from Supabase
+        async function loadReviews() {
+            const loader = document.getElementById('loader');
+            const list = document.getElementById('reviewsList');
+
+            loader.classList.remove('hidden');
+            list.innerHTML = '';
+
+            try {
+                const { data, error } = await _supabase
+                    .from('reviews')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div class="text-center py-20 text-gray-400 italic">No reviews yet. Be the first to share your experience!</div>';
+                    return;
+                }
+
+                list.innerHTML = data.map(review => {
+                    const stars = '<i class="fa-solid fa-star"></i>'.repeat(review.rating) +
+                        '<i class="fa-regular fa-star"></i>'.repeat(5 - review.rating);
+                    const date = new Date(review.created_at).toLocaleDateString();
+
+                    return `
+                        <div class="bg-white p-8 rounded-[30px] shadow-sm border border-brand-100 hover:shadow-lg transition-shadow duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="text-yellow-400 text-sm flex gap-0.5">${stars}</div>
+                                <span class="text-[10px] uppercase font-bold text-gray-300 tracking-widest">${date}</span>
+                            </div>
+                            <h3 class="font-bold text-gray-900 text-lg mb-2 capitalize">${review.name}</h3>
+                            <p class="text-gray-600 leading-relaxed italic">"${review.comment}"</p>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error('Error:', err);
+                list.innerHTML = '<div class="text-center py-20 text-red-400">Error loading reviews. Please try again.</div>';
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        // 2. Submit New Review
+        document.getElementById('reviewForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const name = document.getElementById('reviewerName').value;
+            const rating = parseInt(document.getElementById('rating').value);
+            const comment = document.getElementById('reviewText').value;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Posting...';
+
+            try {
+                const { error } = await _supabase
+                    .from('reviews')
+                    .insert([{ name, rating, comment }]);
+
+                if (error) throw error;
+
+                alert("Thank you! Your beautiful story has been shared. 🌹");
+                document.getElementById('reviewForm').reset();
+                loadReviews();
+            } catch (err) {
+                alert("Failed to post review: " + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Post My Review";
+            }
+        });
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', loadReviews);
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

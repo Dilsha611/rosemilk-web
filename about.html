@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                document.documentElement.style.display = 'none';
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <title>About Us - Rosemilk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff0f3',
+                            100: '#ffe3e8',
+                            200: '#ffc9d6',
+                            300: '#ff9fb6',
+                            400: '#ff6b8e',
+                            500: '#f73b68',
+                            600: '#e31b4b',
+                            700: '#bf0e36',
+                            800: '#9e0d2d',
+                            900: '#850f29',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-sans antialiased text-gray-800 bg-brand-50/30">
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex items-center gap-2">
+                        <i class="fa-solid fa-rose text-brand-500 text-2xl"></i>
+                        <span class="font-serif text-3xl font-bold text-gray-900 tracking-tight">Rosemilk</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-gray-600 font-medium hover:text-brand-600 transition">Home</a>
+                    <a href="products.html" class="text-gray-600 font-medium hover:text-brand-600 transition">Shop</a>
+                    <a href="about.html" class="text-brand-600 font-medium hover:text-brand-800 transition">Our
+                        Story</a>
+                    <a href="contact.html" class="text-gray-600 font-medium hover:text-brand-600 transition">Contact</a>
+                    <button onclick="logout()" class="text-gray-600 font-medium hover:text-red-500 transition"
+                        title="Logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-xl"></i>
+                    </button>
+                    <a href="products.html"
+                        class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg shadow-brand-500/30">
+                        Buy Now
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-2 shadow-lg">
+                <a href="index.html"
+                    class="block px-3 py-2 text-gray-600 font-medium hover:text-brand-600 hover:bg-gray-50 rounded-md">Home</a>
+                <a href="products.html"
+                    class="block px-3 py-2 text-gray-600 font-medium hover:text-brand-600 hover:bg-gray-50 rounded-md">Shop</a>
+                <a href="about.html" class="block px-3 py-2 text-brand-600 font-medium bg-brand-50 rounded-md">Our
+                    Story</a>
+                <a href="contact.html"
+                    class="block px-3 py-2 text-gray-600 font-medium hover:text-brand-600 hover:bg-gray-50 rounded-md">Contact</a>
+                <hr class="border-gray-100 my-1">
+                <button onclick="logout()"
+                    class="block w-full text-left px-3 py-2 text-red-500 font-bold hover:bg-red-50 rounded-md">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-brand-100 pt-32 pb-16 text-center">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">Our Journey</h1>
+        <p class="text-gray-600 max-w-2xl mx-auto px-4">From humble beginnings to your daily glow routine.</p>
+    </header>
+
+    <!-- Content -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="Rose Garden" class="w-full h-full object-cover">
+                </div>
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-serif font-bold text-gray-900 leading-tight">Rooted in Nature,<br>Backed by
+                        Science.</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Rosemilk was born from a simple belief: that nature holds the key to timeless beauty. Our
+                        journey began in the lush rose gardens of Nuwara Eliya, where we discovered the potent healing
+                        properties of wild roses.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Combined with the nourishing richness of pure milk proteins, we created a formula that not only
+                        hydrates but transforms. Today, Rosemilk is more than just a cream—it's a celebration of
+                        self-care and natural radiance.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mt-8">
+                        <div>
+                            <h4 class="font-bold text-brand-500 text-3xl">5+</h4>
+                            <p class="text-sm text-gray-500 uppercase tracking-wide">Years of Research</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-brand-500 text-3xl">10k+</h4>
+                            <p class="text-sm text-gray-500 uppercase tracking-wide">Happy Customers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-serif font-bold text-gray-900 mb-12">Our Core Values</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6">
+                    <i class="fa-solid fa-earth-americas text-4xl text-brand-500 mb-4"></i>
+                    <h3 class="font-bold text-xl mb-2">Sustainable Sourcing</h3>
+                    <p class="text-gray-600">We work directly with local farmers to ensure ethical and sustainable
+                        harvesting.</p>
+                </div>
+                <div class="p-6">
+                    <i class="fa-solid fa-flask text-4xl text-brand-500 mb-4"></i>
+                    <h3 class="font-bold text-xl mb-2">Clean Formulations</h3>
+                    <p class="text-gray-600">No parabens, no sulfates, no artificial fragrances. Just pure goodness.</p>
+                </div>
+                <div class="p-6">
+                    <i class="fa-solid fa-heart text-4xl text-brand-500 mb-4"></i>
+                    <h3 class="font-bold text-xl mb-2">Community First</h3>
+                    <p class="text-gray-600">A portion of our profits goes to supporting education in farming
+                        communities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Same as Home) -->
+    <footer class="bg-gray-900 text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">© 2026 Rosemilk. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

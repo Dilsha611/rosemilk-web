@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Dashboard - Rosemilk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <nav class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">Marketing Panel</h1>
+        <button onclick="logout()" class="text-red-500 font-medium">Logout</button>
+    </nav>
+    <main class="p-6 max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold mb-6">Promotions & Campaigns</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-2xl border shadow-sm border-brand-100">
+                <h3 class="font-bold text-lg mb-4 text-brand-600">Active Campaign: Summer Sale</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between text-sm">
+                        <span>Status:</span>
+                        <span class="font-bold text-green-600">Running</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span>Usage:</span>
+                        <span class="font-bold">452 Customers</span>
+                    </div>
+                </div>
+                <button class="w-full mt-6 bg-gray-900 text-white py-2 rounded-lg text-sm font-bold">Edit
+                    Campaign</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+
+</html>
